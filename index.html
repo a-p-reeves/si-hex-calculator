@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Document</title>
+        <style>
+        </style>
+    </head>
+   
+    <body style="background-color:white;" onload="getdata(); calculatehex();">
+
+        <div style="margin:40px; color:black; background-color:white; font-family:Arial;" width="50%" >
+            
+            <div style="float:left;  width:40%"> <!-- left column -->
+                <H2>SI Heat Exchanger Design Calculator</H2>
+                <br>
+                <br>
+                <table>
+                    <tr>
+                      <td><b>Overall Configuration</b></td>                                     <!-- overall specs -->
+                      <td></td>
+                    </tr>
+                    <tr>
+                        <td><label for="efficiency">LMTD Correction Factor</label></td>
+                        <td><input id="efficiency" type="numbers" value="0.812"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="U">Heat Transfer Coefficient U (W*m<sup>-2</sup>*K<sup>-1</sup>)</label></td>
+                        <td><input id="U" type="numbers" value="600.000"></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Stream Configuration</b></td>                                     <!-- overall specs -->
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label for="hs">Hot Stream</label></td>
+                        <td>
+                            <select id="hs" type="string" value="tube">
+                                <option value="tube">tube</option>
+                                <option value="shell">shell</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="flowrate_hot">Hot Stream flowrate (kg/h)</label></td>
+                        <td><input id="flowrate_hot" type="numbers" value="100000"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="T_hot_in">Hot Stream inlet temperature (degC)</label></td>
+                        <td><input id="T_hot_in" type="numbers" value="95"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="T_hot_out">Hot Stream outlet temperature (degC)</label></td>
+                        <td><input id="T_hot_out" type="numbers" value="40"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="T_cold_in">Cold Stream inlet temperature (degC)</label></td>
+                        <td><input id="T_cold_in" type="numbers" value="25"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="T_cold_out">Cold Stream outlet temperature (degC)</label></td>
+                        <td><input id="T_cold_out" type="numbers" value="40"></td>
+                    </tr>
+                    <tr>
+                        <td><b>Tube Side Specification</b></td>                                     <!-- tube side specs -->
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label for="L">Tube Length (m)</label></td>
+                        <td><input id="L" type="numbers" value="6"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tube_od">Tube Outer Diameter (mm)</label></td>
+                        <td><input id="tube_od" type="numbers" value="25.4"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="tube_thickness">Tube Wall Thickness (mm)</label></td>
+                        <td><input id="tube_thickness" type="numbers" value="2.8"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="fluid_tube">Fluid</label></td>
+                        <td>
+                            <select id="fluid_tube" type="string" value="custom" onclick="getdata()">
+                                <option value="custom">Custom</option>
+                                <option value="water">Water</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="rho_tube">Density (kg/m<sup>3</sup>)</label></td>
+                        <td id="input_rho_tube"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="mu_tube">Dynamic Viscosity (mPa*s)</label></td>
+                        <td id="input_mu_tube"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="cp_tube">Specific Heat Capaticy C<sub>p</sub> (kJ/(kg*K))</label></td>
+                        <td id="input_cp_tube"></td>
+                    </tr>
+
+                    <tr>
+                        <td><b>Shell Side Specification</b></td>                                     <!-- shell side specs -->
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td><label for="fluid_shell">Fluid</label></td>
+                        <td>
+                            <select id="fluid_shell" type="string" value="custom" onclick="getdata()">
+                                <option value="custom">Custom</option>
+                                <option value="water">Water</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><label for="rho_shell">Density (kg/m<sup>3</sup>)</label></td>
+                        <td id="input_rho_shell"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="mu_shell">Dynamic Viscosity (mPa*s)</label></td>
+                        <td id="input_mu_shell"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="cp_shell">Specific Heat Capaticy C<sub>p</sub> (kJ/(kg*K))</label></td>
+                        <td id="input_cp_shell"></td>
+                    </tr>            
+                  </table>
+            </div>
+
+            <div style="float:left; width:60%"> <!-- right column -->
+            
+            <br>
+            
+            <br>
+
+            <!-- outputs -->
+
+            <table>
+                <tr>
+                    <td>Tubeside Superficial Velocity (m/s)</td>
+                    <td id="V_tube" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>Tubeside Reynold's Number</td>
+                    <td id="Re_tube" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>Tubeside Pressure Drop (Pa)</td>
+                    <td id="dP_tube" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>Cold Side Flowrate (kg/h)</td>
+                    <td id="flowrate_shell" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>LMTD (K)</td>
+                    <td id="lmtd" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>Corrected LMTD (K)</td>
+                    <td id="lmtd_corrected" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>Q (kW)</td>
+                    <td id="Q" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>Required Heat Exchanger Area (m<sup>2</sup>)</td>
+                    <td id="A" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+                    <td>Number of Tubes</td>
+                    <td id="NT" style="border: 1px solid black;"></td>
+                </tr>
+                <tr>
+            </table>
+            
+            <br>
+            <br>
+
+            <button onclick='calculatehex()'>Submit</button>
+            <button onclick='reload()'>Reset</button>
+
+            <br>
+            <br>
+                <div id="warning_label"></div>
+
+            </div>
+        </div>
+
+        
+
+        <script src="script.js"></script>
+    </body>
+</html>
