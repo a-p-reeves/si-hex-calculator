@@ -23,7 +23,7 @@ function getdata() {
     else {
         document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="997"></input>';
         document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="0.890"></input>';
-        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="4.2"></input>';
+        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="2.84"></input>';
     }
 
         
@@ -51,28 +51,28 @@ function calculatehex() {
     let T_cold_in = document.getElementById('T_cold_in').value                // shell T in
     let T_cold_out = document.getElementById('T_cold_out').value              // shell T out
     let cp_shell = document.getElementById('cp_shell').value                    // shell fluid heat capacity 
-    let U = document.getElementById('U').value;                                 // defined U value
+    let U = document.getElementById('U').value                                 // defined U value
 
     let flowrate_hot = document.getElementById('flowrate_hot').value            // hot stream flowrate
     
-    let flowrate_cold = 1;
-    let flowrate_shell = 1;
-    let flowrate_tube = 1;
-    let T_shell_in = 1;
-    let T_shell_out = 1;
-    let T_tube_in = 1;
-    let T_tube_out = 1;
-    let tube_id = 1;
-    let lmtd = 1;
-    let lmtd_corrected = 1;
-    let Q_initial = 1;
-    let Q = 0;
-    let A = 0;
-    let dP_tube = 1;
-    let V_tube = 1;
-    let Re_tube = 1;
-    let NT = 1;
-    let f  = 1;                                 // friction factor
+    let flowrate_cold = 1
+    let flowrate_shell = 1
+    let flowrate_tube = 1
+    let T_shell_in = 1
+    let T_shell_out = 1
+    let T_tube_in = 1
+    let T_tube_out = 1
+    let tube_id = 1
+    let lmtd = 1
+    let lmtd_corrected = 1
+    let Q_initial = 1
+    let Q = 1
+    let A = 1
+    let dP_tube = 1
+    let V_tube = 1
+    let Re_tube = 1
+    let NT = 1
+    let f  = 1
     
     // -------------------------------------------- initialization --------------------------------------------
 
@@ -108,19 +108,51 @@ function calculatehex() {
 
     // -------------------------------------------- error checks --------------------------------------------
 
-    // check for stream crossover
-    if (T_cold_out > T_hot_out || T_cold_in > T_hot_in) {
-        document.getElementById('warning_label').innerHTML = '<div style="padding:30px; color:white; background-color:red; border:1px solid black; width:50%">Error: Stream Temperature Crossover!</div>';
+    // respect error severity hierarchy - place more severe errors higher up
+
+    // ready message (no errors)
+    document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:white; border:1px solid black; width:50%">Status: Ready!</div>';
+
+    // clip LMTD correction factor to 1
+    if (efficiency > 1){
+        efficiency = 1;
+        document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:orange; border:1px solid black; width:50%">Warning: LMTD correction factor re-set to 1!</div>';
+    }
+        
+    // check for inputs less than zero
+    if (efficiency <= 0 || U <= 0  || flowrate_hot <= 0  || L <= 0  || tube_thickness < 0  || rho_tube <= 0  || mu_tube <= 0  || cp_tube <= 0  || rho_shell <= 0  || mu_shell <= 0  || cp_shell <= 0 ) {
+        document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:white; background-color:red; border:1px solid black; width:50%">Error: Invalid input (no negative or zero values allowed)!</div>';
         return;
     }
-    else {
-        document.getElementById('warning_label').innerHTML = '<div style="padding:30px; color:black; background-color:white; border:1px solid black; width:50%">Ready</div>';
+
+    // check geometry
+    if (tube_od <= 2*tube_thickness){
+        document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:white; background-color:red; border:1px solid black; width:50%">Error: Tube outer diameter must be greater than 2x the tube thickness!</div>';
+        return;
+    }
+
+    // check hot stream 
+    if (T_hot_out > T_hot_in) {
+        document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:white; background-color:red; border:1px solid black; width:50%">Error: Hot stream inlet temperature must be higher than outlet temperature!</div>';
+        return;
+    }
+
+    // check cold stream 
+    if (T_cold_out < T_cold_in) {
+        document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:white; background-color:red; border:1px solid black; width:50%">Error: Cold stream inlet temperature must be lower than outlet temperature!</div>';
+        return;
+    }
+
+    // check for stream crossover
+    if (T_cold_out > T_hot_out) {
+        document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:white; background-color:red; border:1px solid black; width:50%">Error: Stream Temperature Crossover!</div>';
+        return;
     }
     
     // -------------------------------------------- calculations --------------------------------------------
 
     // geometry
-    tube_id = tube_od - tube_thickness;
+    tube_id = tube_od - 2*tube_thickness;
 
     // LMTD
     lmtd = ((T_hot_in-T_cold_out)-(T_hot_out-T_cold_in))/(Math.log((T_hot_in-T_cold_out)/(T_hot_out-T_cold_in)));
@@ -146,16 +178,17 @@ function calculatehex() {
     NT = A/(3.1415926535*(tube_od)*L);
 
     // -------------------------------------------- outputs -------------------------------------------- 
-    document.getElementById('V_tube').innerHTML = V_tube.toFixed(2);
-    document.getElementById('Re_tube').innerHTML = Re_tube.toFixed(2);
-    document.getElementById('dP_tube').innerHTML = dP_tube.toFixed(2);
-    document.getElementById('flowrate_shell').innerHTML = (flowrate_shell).toFixed(2);
-    document.getElementById('lmtd').innerHTML = lmtd.toFixed(2);
-    document.getElementById('lmtd_corrected').innerHTML = lmtd_corrected.toFixed(2);
-    document.getElementById('Q').innerHTML = (Q/1000).toFixed(2);
-    document.getElementById('A').innerHTML = A.toFixed(2);
-    document.getElementById('NT').innerHTML = NT.toFixed(0);
+    document.getElementById('V_tube').innerHTML = '<input type="numbers" value="'+V_tube.toFixed(2)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
+    document.getElementById('Re_tube').innerHTML = '<input type="numbers" value="'+Re_tube.toFixed(2)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
+    document.getElementById('dP_tube').innerHTML = '<input type="numbers" value="'+(dP_tube/1000).toFixed(3)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
+    document.getElementById('flowrate_shell').innerHTML = '<input type="numbers" value="'+(flowrate_shell).toFixed(2)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
+    document.getElementById('lmtd').innerHTML = '<input type="numbers" value="'+lmtd.toFixed(2)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
+    document.getElementById('lmtd_corrected').innerHTML = '<input type="numbers" value="'+lmtd_corrected.toFixed(2)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
+    document.getElementById('Q').innerHTML = '<input type="numbers" value="'+(Q/1000).toFixed(2)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
+    document.getElementById('A').innerHTML = '<input type="numbers" value="'+A.toFixed(2)+'" style="background-color:lightgrey; font-weight: bold; width:100%;" readonly>';
+    document.getElementById('NT').innerHTML = '<input type="numbers" value="'+NT.toFixed(0)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
 }
+
 
 // -------------------------------------------- reload -------------------------------------------- 
 function reload() {

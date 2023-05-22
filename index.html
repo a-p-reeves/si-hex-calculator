@@ -38,7 +38,7 @@
                     <tr>
                         <td><label for="hs">Hot Stream</label></td>
                         <td>
-                            <select id="hs" type="string" value="tube">
+                            <select id="hs" type="string" value="tube" style="width:100%;">
                                 <option value="tube">tube</option>
                                 <option value="shell">shell</option>
                             </select>
@@ -83,7 +83,7 @@
                     <tr>
                         <td><label for="fluid_tube">Fluid</label></td>
                         <td>
-                            <select id="fluid_tube" type="string" value="custom" onclick="getdata()">
+                            <select id="fluid_tube" type="string" value="custom" onclick="getdata()" style="width:100%;">
                                 <option value="custom">Custom</option>
                                 <option value="water">Water</option>
                             </select>
@@ -109,7 +109,7 @@
                     <tr>
                         <td><label for="fluid_shell">Fluid</label></td>
                         <td>
-                            <select id="fluid_shell" type="string" value="custom" onclick="getdata()">
+                            <select id="fluid_shell" type="string" value="custom" onclick="getdata()" style="width:100%;">
                                 <option value="custom">Custom</option>
                                 <option value="water">Water</option>
                             </select>
@@ -133,47 +133,51 @@
             <div style="float:left; width:60%"> <!-- right column -->
             
             <br>
-            
+
             <br>
 
             <!-- outputs -->
 
             <table>
                 <tr>
+                    <td><b>Results</b></td>
+                    <td></td>
+                </tr>
+                <tr>
                     <td>Tubeside Superficial Velocity (m/s)</td>
-                    <td id="V_tube" style="border: 1px solid black;"></td>
+                    <td id="V_tube"></td>
                 </tr>
                 <tr>
                     <td>Tubeside Reynold's Number</td>
-                    <td id="Re_tube" style="border: 1px solid black;"></td>
+                    <td id="Re_tube"></td>
                 </tr>
                 <tr>
-                    <td>Tubeside Pressure Drop (Pa)</td>
-                    <td id="dP_tube" style="border: 1px solid black;"></td>
+                    <td>Tubeside Pressure Drop (kPa)</td>
+                    <td id="dP_tube"></td>
                 </tr>
                 <tr>
-                    <td>Cold Side Flowrate (kg/h)</td>
-                    <td id="flowrate_shell" style="border: 1px solid black;"></td>
+                    <td>Cold Stream Flowrate (kg/h)</td>
+                    <td id="flowrate_shell"></td>
                 </tr>
                 <tr>
                     <td>LMTD (K)</td>
-                    <td id="lmtd" style="border: 1px solid black;"></td>
+                    <td id="lmtd"></td>
                 </tr>
                 <tr>
                     <td>Corrected LMTD (K)</td>
-                    <td id="lmtd_corrected" style="border: 1px solid black;"></td>
+                    <td id="lmtd_corrected"></td>
                 </tr>
                 <tr>
                     <td>Q (kW)</td>
-                    <td id="Q" style="border: 1px solid black;"></td>
+                    <td id="Q"></td>
                 </tr>
                 <tr>
                     <td>Required Heat Exchanger Area (m<sup>2</sup>)</td>
-                    <td id="A" style="border: 1px solid black;"></td>
+                    <td id="A"></td>
                 </tr>
                 <tr>
                     <td>Number of Tubes</td>
-                    <td id="NT" style="border: 1px solid black;"></td>
+                    <td id="NT"></td>
                 </tr>
                 <tr>
             </table>
