@@ -23,8 +23,16 @@
                       <td></td>
                     </tr>
                     <tr>
-                        <td><label for="efficiency">LMTD Correction Factor</label></td>
-                        <td><input id="efficiency" type="numbers" value="0.812"></td>
+                        <td><label for="passes">Shell/Tube Passes</label></td>
+                        <td><select id="passes" type="string" value="1-1" onclick="getdata()" style="width:100%;">
+                            <option value="1-1">1-1</option>
+                            <option value="1-2">1-2</option>
+                            <option value="2-4">2-4</option>
+                        </select></td>
+                    </tr>
+                    <tr>
+                        <td><label for="input_flowtype">Flow Type</label></td>
+                        <td id="input_flowtype"></td>
                     </tr>
                     <tr>
                         <td><label for="U">Heat Transfer Coefficient U (W*m<sup>-2</sup>*K<sup>-1</sup>)</label></td>
@@ -38,7 +46,7 @@
                     <tr>
                         <td><label for="hs">Hot Stream</label></td>
                         <td>
-                            <select id="hs" type="string" value="tube" style="width:100%;">
+                            <select id="hs" type="string" value="shell" style="width:100%;">
                                 <option value="tube">tube</option>
                                 <option value="shell">shell</option>
                             </select>
@@ -162,6 +170,10 @@
                 <tr>
                     <td>LMTD (K)</td>
                     <td id="lmtd"></td>
+                </tr>
+                <tr>
+                    <td>LMTD Correction Factor (Bowman et al. 1940)</td>
+                    <td id="correction_factor"></td>
                 </tr>
                 <tr>
                     <td>Corrected LMTD (K)</td>
