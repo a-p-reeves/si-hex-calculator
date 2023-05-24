@@ -5,11 +5,13 @@ function getdata() {
     let fluid_shell = document.getElementById('fluid_shell').value              // shell fluid selector
     let passes = document.getElementById('passes').value                        // passes selector
 
+    // -------------------------------------------- data inputs -------------------------------------------- 
+
     if (passes =='1-1'){
-        document.getElementById('input_flowtype').innerHTML = '<td><select id="flowtype" type="string" value="countercurrent" style="width:100%;"><option value="countercurrent">counter-current</option><option value="cocurrent">co-current</option>';
+        document.getElementById('input_flowtype').innerHTML = '<td><select id="flowtype" type="string" value="countercurrent" style="width:100%;" onclick="visualise()"><option value="countercurrent">counter-current</option><option value="cocurrent">co-current</option>';
     }
     else {
-        document.getElementById('input_flowtype').innerHTML = '<td><select id="flowtype" type="string" value="mixed" style="width:100%; background-color:lightgrey;" readonly><option value="mixed">mixed</option>';
+        document.getElementById('input_flowtype').innerHTML = '<td><select id="flowtype" type="string" value="mixed" style="width:100%; background-color:lightgrey;" onclick="visualise()" readonly><option value="mixed">mixed</option>';
     }
 
     if (fluid_shell=='water'){
@@ -34,11 +36,108 @@ function getdata() {
         document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="2.84"></input>';
     }
 
-        
     //let rho_shell = document.getElementById('rho_shell').value                  // shell fluid density (kg/m3)
     //let mu_shell = document.getElementById('mu_shell').value                    // shell fluid dyn. viscosity
+
 }
 
+// -------------------------------------------- visualisation -------------------------------------------- 
+function visualise() {
+
+    let passes = document.getElementById('passes').value                            // passes selector
+    let flowtype = document.getElementById('flowtype').value;                       // flow type
+    let T_hot_in = document.getElementById('T_hot_in').value;                       // hot T in
+    let T_hot_out = document.getElementById('T_hot_out').value;                     // hot T out
+    let T_cold_in = document.getElementById('T_cold_in').value;                     // cold T in
+    let T_cold_out = document.getElementById('T_cold_out').value;                   // cold T out
+    let hs = document.getElementById('hs').value;                                   // hot stream selection
+    
+    //define temperatures by order of appearance on screen
+    let T1 = 1;
+    let T2 = 2;
+    let T3 = 3;
+    let T4 = 4;
+
+    //define hot/cold letter (H/C) in order of appearance on screen
+    let L1 = "";
+    let L2 = "";
+    let L3 = "";
+    let L4 = "";
+    
+    if (hs == "tube"){  // tube side: hot stream; shell side: hot stream; 
+
+        document.getElementById('tube_indicator').innerHTML = '<div style="color:red;">[Hot]</div>';
+        document.getElementById('shell_indicator').innerHTML = '<div style="color:blue;">[Cold]</div>';
+
+        L1 = "<span style='color:red;'>H</span>";
+        L2 = "<span style='color:blue;'>C</span>";  
+
+        T1 = T_hot_in;
+        T2 = T_cold_in;
+        if (passes == "1-1") {
+            L3 = "<span style='color:blue;'>C</span>";
+            L4 = "<span style='color:red;'>H</span>";
+
+            T3 = T_cold_out;
+            T4 = T_hot_out;
+        }
+        else {
+            L3 = "<span style='color:red;'>H</span>";
+            L4 = "<span style='color:blue;'>C</span>";
+
+            T3 = T_hot_out;
+            T4 = T_cold_out;
+        }
+    }
+    else {  // tube side: cold stream; shell side: hot stream; 
+
+        document.getElementById('tube_indicator').innerHTML = '<div style="color:blue;">[Cold]</div>';
+        document.getElementById('shell_indicator').innerHTML = '<div style="color:red;">[Hot]</div>';
+
+        L1 = "<span style='color:blue;'>C</span>";
+        L2 = "<span style='color:red;'>H</span>";
+
+        T1 = T_cold_in;
+        T2 = T_hot_in;
+        if (passes == "1-1") {
+            L3 = "<span style='color:red;'>H</span>";
+            L4 = "<span style='color:blue;'>C</span>";
+
+            T3 = T_hot_out;
+            T4 = T_cold_out;
+        }
+        else {
+            L3 = "<span style='color:blue;'>C</span>";
+            L4 = "<span style='color:red;'>H</span>";
+
+            T3 = T_cold_out;
+            T4 = T_hot_out;
+        }
+    }
+
+    if (passes == "1-1") {
+        if (flowtype == "countercurrent") {
+            document.getElementById('hex_text-top').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L1+',in</sub> = '+T1+'°C &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L2+',in</sub> = '+T2+'°C';
+            document.getElementById('hex_image').innerHTML = '<img src="1-1-counter.png" width="500px"></img>';
+            document.getElementById('hex_text-bottom').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L3+',out</sub> = '+T3+'°C &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L4+',out</sub> = '+T4+'°C';
+        }
+        else {
+            document.getElementById('hex_text-top').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L1+',in</sub> = '+T1+'°C &nbsp T<sub>'+L2+',in</sub> = '+T2+'°C';
+            document.getElementById('hex_image').innerHTML = '<img src="1-1-co.png" width="500px"></img>';
+            document.getElementById('hex_text-bottom').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L3+',out</sub>='+T3+'°C &nbsp T<sub>'+L4+',out</sub>='+T4+'°C';
+        }
+    }
+    if (passes == "1-2") {
+        document.getElementById('hex_text-top').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L1+',in</sub> = '+T1+'°C &nbsp T<sub>'+L2+',in</sub> = '+T2+'°C';
+        document.getElementById('hex_image').innerHTML = '<img src="1-2.png" width="500px"></img>';
+        document.getElementById('hex_text-bottom').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L3+',out</sub> = '+T3+'°C &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L4+',out</sub> = '+T4+'°C';
+    }
+    if (passes == "2-4") {
+        document.getElementById('hex_text-top').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L1+',in</sub> = '+T1+'°C &nbsp T<sub>'+L2+',in</sub> = '+T2+'°C';
+        document.getElementById('hex_image').innerHTML = '<img src="2-4.png" width="500px"></img>';
+        document.getElementById('hex_text-bottom').innerHTML = '&nbsp &nbsp &nbsp &nbsp &nbsp T<sub>'+L3+',out</sub> = '+T3+'°C &nbsp T<sub>'+L4+',out</sub> = '+T4+'°C';
+    }
+}
 
 // -------------------------------------------- main calculation function -------------------------------------------- 
 function calculatehex() {
@@ -50,14 +149,14 @@ function calculatehex() {
     let L = document.getElementById('L').value;                                     // tube length (m)
     let tube_od = document.getElementById('tube_od').value/1000;                    // tube outer diameter (mm)
     let tube_thickness = document.getElementById('tube_thickness').value/1000;      // tube thickness (mm) 
-    let T_hot_in = document.getElementById('T_hot_in').value;                       // tube T in
-    let T_hot_out = document.getElementById('T_hot_out').value;                     // tube T out
+    let T_hot_in = document.getElementById('T_hot_in').value;                       // hot T in
+    let T_hot_out = document.getElementById('T_hot_out').value;                     // hot T out
     let passes = document.getElementById('passes').value;                           // number of passes configuration
     let rho_tube = document.getElementById('rho_tube').value;                       // tube fluid density
     let mu_tube = document.getElementById('mu_tube').value;                         // tube fluid dyn. viscosity
     let cp_tube = document.getElementById('cp_tube').value;                         // tube fluid heat capacity
-    let T_cold_in = document.getElementById('T_cold_in').value;                     // shell T in
-    let T_cold_out = document.getElementById('T_cold_out').value;                   // shell T out
+    let T_cold_in = document.getElementById('T_cold_in').value;                     // cold T in
+    let T_cold_out = document.getElementById('T_cold_out').value;                   // cold T out
     let cp_shell = document.getElementById('cp_shell').value;                       // shell fluid heat capacity 
     let U = document.getElementById('U').value;                                     // defined U value
     let flowrate_hot = document.getElementById('flowrate_hot').value;               // hot stream flowrate
@@ -160,15 +259,6 @@ function calculatehex() {
     if ( ((T_hot_in-T_cold_out)/(T_hot_out-T_cold_in) == 1 ) ) {
         T_hot_in = T_hot_in + 0.00001;
     }
-
-    // LMTD exception: co-current flow
-    
-
-    // LMTD exception: (T_hot_out-T_cold_in) = 0 or (T_hot_in-T_cold_out) = 0
-    //if ( ((T_hot_in == T_cold_out) || (T_hot_out-T_cold_in) == 0) ) {
-    //    T_hot_in = T_hot_in + 0.00001;
-    //}
-
     // define temperature deltas (overwritten for co-current flow)
     let dT1 = T_hot_in-T_cold_out;
     let dT2 = T_hot_out-T_cold_in;
@@ -185,7 +275,6 @@ function calculatehex() {
         dT2 = 0.0000001;
         document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:orange; border:1px solid black; width:100%">Warning: ΔT<sub>2</sub>=0 therefore ΔT<sub>2</sub> set to 1E-6 K!</div>';
     }
-
     // LMTD
     lmtd = ((dT1)-(dT2))/(Math.log((dT1)/(dT2)));
 
@@ -246,8 +335,7 @@ function calculatehex() {
     document.getElementById('A').innerHTML = '<input type="numbers" value="'+A.toFixed(2)+'" style="background-color:lightgrey; font-weight: bold; width:100%;" readonly>';
     document.getElementById('NT').innerHTML = '<input type="numbers" value="'+NT.toFixed(0)+'" style="background-color:#f6f6f6; width:100%;" readonly>';
 
-    // -------------------------------------------- visualisation -------------------------------------------- 
-
+    visualise();
 }
 
 

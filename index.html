@@ -24,7 +24,7 @@
                     </tr>
                     <tr>
                         <td><label for="passes">Shell/Tube Passes</label></td>
-                        <td><select id="passes" type="string" value="1-1" onclick="getdata()" style="width:100%;">
+                        <td><select id="passes" type="string" value="1-1" onclick="getdata(); visualise();" style="width:100%;">
                             <option value="1-1">1-1</option>
                             <option value="1-2">1-2</option>
                             <option value="2-4">2-4</option>
@@ -46,7 +46,7 @@
                     <tr>
                         <td><label for="hs">Hot Stream</label></td>
                         <td>
-                            <select id="hs" type="string" value="shell" style="width:100%;">
+                            <select id="hs" type="string" value="shell" style="width:100%;" onclick="visualise()">
                                 <option value="tube">tube</option>
                                 <option value="shell">shell</option>
                             </select>
@@ -57,24 +57,24 @@
                         <td><input id="flowrate_hot" type="numbers" value="100000"></td>
                     </tr>
                     <tr>
-                        <td><label for="T_hot_in">Hot Stream inlet temperature (degC)</label></td>
-                        <td><input id="T_hot_in" type="numbers" value="95"></td>
+                        <td><label for="T_hot_in">Hot Stream inlet temperature (°C)</label></td>
+                        <td><input id="T_hot_in" type="numbers" value="95" onkeyup="visualise()"></td>
                     </tr>
                     <tr>
-                        <td><label for="T_hot_out">Hot Stream outlet temperature (degC)</label></td>
-                        <td><input id="T_hot_out" type="numbers" value="40"></td>
+                        <td><label for="T_hot_out">Hot Stream outlet temperature (°C)</label></td>
+                        <td><input id="T_hot_out" type="numbers" value="40" onkeyup="visualise()"></td>
                     </tr>
                     <tr>
-                        <td><label for="T_cold_in">Cold Stream inlet temperature (degC)</label></td>
-                        <td><input id="T_cold_in" type="numbers" value="25"></td>
+                        <td><label for="T_cold_in">Cold Stream inlet temperature (°C)</label></td>
+                        <td><input id="T_cold_in" type="numbers" value="25" onkeyup="visualise()"></td>
                     </tr>
                     <tr>
-                        <td><label for="T_cold_out">Cold Stream outlet temperature (degC)</label></td>
-                        <td><input id="T_cold_out" type="numbers" value="40"></td>
+                        <td><label for="T_cold_out">Cold Stream outlet temperature (°C)</label></td>
+                        <td><input id="T_cold_out" type="numbers" value="40" onkeyup="visualise()"></td>
                     </tr>
                     <tr>
                         <td><b>Tube Side Specification</b></td>                                     <!-- tube side specs -->
-                        <td></td>
+                        <td><div id="tube_indicator"></div></td>
                     </tr>
                     <tr>
                         <td><label for="L">Tube Length (m)</label></td>
@@ -112,7 +112,7 @@
 
                     <tr>
                         <td><b>Shell Side Specification</b></td>                                     <!-- shell side specs -->
-                        <td></td>
+                        <td><div id="shell_indicator"></div></td>
                     </tr>
                     <tr>
                         <td><label for="fluid_shell">Fluid</label></td>
@@ -146,10 +146,18 @@
 
             <!-- outputs -->
 
+            <p id="hex_text-top"></p>
+            <div id="hex_image" style="margin-top:-10px;"></div>
+            <p id="hex_text-bottom" style="margin-top:-20px;"></p>
+
             <table>
                 <tr>
                     <td><b>Results</b></td>
                     <td></td>
+                </tr>
+                <tr>
+                    <td>Cold Stream Flowrate (kg/h)</td>
+                    <td id="flowrate_shell"></td>
                 </tr>
                 <tr>
                     <td>Tubeside Superficial Velocity (m/s)</td>
@@ -162,10 +170,6 @@
                 <tr>
                     <td>Tubeside Pressure Drop (kPa)</td>
                     <td id="dP_tube"></td>
-                </tr>
-                <tr>
-                    <td>Cold Stream Flowrate (kg/h)</td>
-                    <td id="flowrate_shell"></td>
                 </tr>
                 <tr>
                     <td>LMTD (K)</td>
