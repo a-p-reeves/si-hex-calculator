@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td><label for="U">Heat Transfer Coefficient U (W*m<sup>-2</sup>*K<sup>-1</sup>)</label></td>
-                        <td><input id="U" type="numbers" value="600.000"></td>
+                        <td><input id="U" type="numbers" value="600"></td>
                     </tr>
 
                     <tr>
@@ -94,6 +94,10 @@
                             <select id="fluid_tube" type="string" value="custom" onclick="getdata()" style="width:100%;">
                                 <option value="custom">Custom</option>
                                 <option value="water">Water</option>
+                                <option value="sea">Sea Water</option>
+                                <option value="light">Light Oil</option>
+                                <option value="heavy">Heavy Oil</option>
+                                <option value="gas">Gasoline</option>
                             </select>
                         </td>
                     </tr>
@@ -120,6 +124,10 @@
                             <select id="fluid_shell" type="string" value="custom" onclick="getdata()" style="width:100%;">
                                 <option value="custom">Custom</option>
                                 <option value="water">Water</option>
+                                <option value="sea">Sea Water</option>
+                                <option value="light">Light Oil</option>
+                                <option value="heavy">Heavy Oil</option>
+                                <option value="gas">Gasoline</option>
                             </select>
                         </td>
                     </tr>
@@ -157,7 +165,7 @@
                 </tr>
                 <tr>
                     <td>Cold Stream Flowrate (kg/h)</td>
-                    <td id="flowrate_shell"></td>
+                    <td id="flowrate_cold"></td>
                 </tr>
                 <tr>
                     <td>Tubeside Superficial Velocity (m/s)</td>
