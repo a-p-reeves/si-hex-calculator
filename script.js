@@ -18,6 +18,8 @@ function getdata() {
     let fluid_tube = document.getElementById('fluid_tube').value                // tube fluid selector
     let fluid_shell = document.getElementById('fluid_shell').value              // shell fluid selector
     
+    // ############# fluid data ############# 
+
     // unfortunately not adjusted for temperature and pressure yet. 
     // Source for cP: https://www.engineeringtoolbox.com/specific-heat-fluids-d_151.html 
 
@@ -46,70 +48,92 @@ function getdata() {
     let mu_gas = 1.00;
     let cP_gas = 2.13;
 
+    // ############# end of fluid data ############# 
+
+    // working variables - default values on start => water values 
+
+    let rho_shell = rho_water;
+    let mu_shell = mu_water;
+    let cP_shell = cP_water;
+
+    let rho_tube = rho_water;
+    let mu_tube = mu_water;
+    let cP_tube = cP_water;
+
     // shell
     if (fluid_shell=='water'){
-        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_water+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_water+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_water+'" style="background-color:lightgrey;" readonly>';
+        rho_shell = rho_water;
+        mu_shell = mu_water;
+        cP_shell = cP_water;
     }
     if (fluid_shell=='sea'){
-        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_sea+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_sea+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_sea+'" style="background-color:lightgrey;" readonly>';
+        rho_shell = rho_sea;
+        mu_shell = mu_sea;
+        cP_shell = cP_sea;
     }
     if (fluid_shell=='light'){
-        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_light+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_light+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_light+'" style="background-color:lightgrey;" readonly>';
+        rho_shell = rho_light;
+        mu_shell = mu_light;
+        cP_shell = cP_light;
     }
     if (fluid_shell=='heavy'){
-        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_heavy+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_heavy+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_heavy+'" style="background-color:lightgrey;" readonly>';
+        rho_shell = rho_heavy;
+        mu_shell = mu_heavy;
+        cP_shell = cP_heavy;
     }
     if (fluid_shell=='gas'){
-        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_gas+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_gas+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_gas+'" style="background-color:lightgrey;" readonly>';
+        rho_shell = rho_gas;
+        mu_shell = mu_gas;
+        cP_shell = cP_gas;
     }
+
     if (fluid_shell=='custom'){
-        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_water+'"></input>';
-        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_water+'"></input>';
-        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_water+'"></input>';
+        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_shell+'"></input>';
+        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_shell+'"></input>';
+        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_shell+'"></input>';
+    }
+    else {
+        document.getElementById('input_rho_shell').innerHTML = '<input id="rho_shell" type="numbers" value="'+rho_shell+'" style="background-color:lightgrey;" readonly></input>';
+        document.getElementById('input_mu_shell').innerHTML = '<input id="mu_shell" type="numbers" value="'+mu_shell+'" style="background-color:lightgrey;" readonly></input>';
+        document.getElementById('input_cp_shell').innerHTML = '<input id="cp_shell" type="numbers" value="'+cP_shell+'" style="background-color:lightgrey;" readonly></input>';
     }
     
     // tube
     if (fluid_tube=='water'){
-        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_water+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_water+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_water+'" style="background-color:lightgrey;" readonly>';
+        rho_tube = rho_water;
+        mu_tube = mu_water;
+        cP_tube = cP_water;
     }
     if (fluid_tube=='sea'){
-        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_sea+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_sea+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_sea+'" style="background-color:lightgrey;" readonly>';
+        rho_tube = rho_sea;
+        mu_tube = mu_sea;
+        cP_tube = cP_sea;
     }
     if (fluid_tube=='light'){
-        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_light+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_light+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_light+'" style="background-color:lightgrey;" readonly>';
+        rho_tube = rho_light;
+        mu_tube = mu_light;
+        cP_tube = cP_light;
     }
     if (fluid_tube=='heavy'){
-        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_heavy+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_heavy+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_heavy+'" style="background-color:lightgrey;" readonly>';
+        rho_tube = rho_heavy;
+        mu_tube = mu_heavy;
+        cP_tube = cP_heavy;
     }
     if (fluid_tube=='gas'){
-        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_gas+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_gas+'" style="background-color:lightgrey;" readonly>';
-        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_gas+'" style="background-color:lightgrey;" readonly>';
+        rho_tube = rho_gas;
+        mu_tube = mu_gas;
+        cP_tube = cP_gas;
     }
     if (fluid_tube=='custom'){
-        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_water+'"></input>';
-        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_water+'"></input>';
-        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_water+'"></input>';
+        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_tube+'"></input>';
+        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_tube+'"></input>';
+        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_tube+'"></input>';
     }
-
+    else {
+        document.getElementById('input_rho_tube').innerHTML = '<input id="rho_tube" type="numbers" value="'+rho_tube+'" style="background-color:lightgrey;" readonly></input>';
+        document.getElementById('input_mu_tube').innerHTML = '<input id="mu_tube" type="numbers" value="'+mu_tube+'" style="background-color:lightgrey;" readonly></input>';
+        document.getElementById('input_cp_tube').innerHTML = '<input id="cp_tube" type="numbers" value="'+cP_tube+'" style="background-color:lightgrey;" readonly></input>';
+    }
 }
 
 // -------------------------------------------- visualisation -------------------------------------------- 
@@ -231,6 +255,8 @@ function calculatehex() {
     let cp_shell = document.getElementById('cp_shell').value;                       // shell fluid heat capacity 
     let U = document.getElementById('U').value;                                     // defined U value
     let flowrate_hot = document.getElementById('flowrate_hot').value;               // hot stream flowrate
+    let fluid_tube = document.getElementById('fluid_tube').value                    // tube fluid selector
+    let fluid_shell = document.getElementById('fluid_shell').value                  // shell fluid selector
 
     // initialisation of variables. Safety net to avoid exceptions, not 100% neccessary
     let flowrate_cold = 1
@@ -286,11 +312,9 @@ function calculatehex() {
 
     // -------------------------------------------- error checks --------------------------------------------
 
-    // respect error severity hierarchy - place more severe errors higher up
-
     // ready message (no errors)
     document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:white; border:1px solid black; width:100%">Status: Ready!</div>';
-        
+
     // check for inputs less than zero
     if (U <= 0  || flowrate_hot <= 0  || L <= 0  || tube_thickness < 0  || rho_tube <= 0  || mu_tube <= 0  || cp_tube <= 0  || rho_shell <= 0  || mu_shell <= 0  || cp_shell <= 0 ) {
         document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:white; background-color:red; border:1px solid black; width:100%">Error: Invalid input (no negative or zero values allowed)!</div>';
@@ -320,7 +344,77 @@ function calculatehex() {
         document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:white; background-color:red; border:1px solid black; width:100%">Error: Stream Temperature Crossover!</div>';
         return;
     }
-    
+
+    // -------------------------------------------- warnings --------------------------------------------
+
+    // phase change detector
+    let boiling_point_tube = 10000;
+    let freezing_point_tube = -10000;
+    let boiling_point_shell = 10000;
+    let freezing_point_shell = -10000;
+
+    if (fluid_tube=='water'){
+        freezing_point_tube = 0;
+        boiling_point_tube = 100;
+    }
+    if (fluid_tube=='sea'){
+        freezing_point_tube = -1.8;
+        boiling_point_tube = 100;
+    }
+    if (fluid_tube=='light'){
+        freezing_point_tube = 0;
+        boiling_point_tube = 500;
+    }
+    if (fluid_tube=='heavy'){
+        freezing_point_tube = -50;
+        boiling_point_tube = 500;
+    }
+    if (fluid_tube=='gas'){
+        freezing_point_tube = -50;
+        boiling_point_tube = 70;
+    }
+
+    if (fluid_shell=='water'){
+    freezing_point_shell = 0;
+    boiling_point_shell = 100;
+    }
+    if (fluid_shell=='sea'){
+        freezing_point_shell = -1.8;
+        boiling_point_shell = 100;
+    }
+    if (fluid_shell=='light'){
+        freezing_point_shell = 0;
+        boiling_point_shell = 500;
+    }
+    if (fluid_shell=='heavy'){
+        freezing_point_shell = -50;
+        boiling_point_shell = 500;
+    }
+    if (fluid_shell=='gas'){
+        freezing_point_shell = -50;
+        boiling_point_shell = 70;
+    }
+
+    if (fluid_tube != 'custom') {
+    // warning for phase change
+        if (T_tube_in > boiling_point_tube || T_tube_out > boiling_point_tube) {               
+            document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:orange; border:1px solid black; width:100%">Warning: Possible evaporation in tube detected! Phase change not currently supported.</div>';
+        }
+        if (T_tube_in < freezing_point_tube || T_tube_out < freezing_point_tube) {               
+            document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:orange; border:1px solid black; width:100%">Warning: Possible freezing in tube detected! Phase change not currently supported.</div>';
+        }
+    }
+
+    if (fluid_shell != 'custom') {
+        // warning for phase change
+            if (T_shell_in > boiling_point_shell || T_shell_out > boiling_point_shell) {               
+                document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:orange; border:1px solid black; width:100%">Warning: Possible evaporation in shell detected! Phase change not currently supported.</div>';
+            }
+            if (T_shell_in < freezing_point_shell || T_shell_out < freezing_point_shell) {               
+                document.getElementById('warning_label').innerHTML = '<div style="padding:10px; color:black; background-color:orange; border:1px solid black; width:100%">Warning: Possible freezing in shell detected! Phase change not currently supported.</div>';
+            }
+        }
+
     // -------------------------------------------- calculations --------------------------------------------
 
     // tube geometry
